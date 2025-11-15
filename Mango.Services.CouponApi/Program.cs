@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using Mango.Services.CouponApi.Data;
 var builder = WebApplication.CreateBuilder(args);
 Batteries.Init();
 // Add services to the container.
@@ -27,5 +28,16 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+ApplyMigrations();
 
 app.Run();
+
+/// <summary>Varolan migrasyonlari uygular</summary>
+void ApplyMigrations()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.Migrate();
+    }
+}

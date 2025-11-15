@@ -7,31 +7,34 @@ namespace Mango.Services.CouponApi.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Coupon> Coupons { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            /// <summary>
+            /// Aciklamadan kurtarak
+            /// bos db'ye veri  eklemek icin kullanabilirsiniz
+            /// </summary>
+            /*
+            modelBuilder.Entity<Coupon>().HasData(new Coupon
+            {
+                CouponId = 1,
+                CouponCode = "10OFF",
+                DiscountAmount = 10,
+                MinAmount = 50
+            });
+
+            modelBuilder.Entity<Coupon>().HasData(new Coupon
+            {
+                CouponId = 2,
+                CouponCode = "20OFF",
+                DiscountAmount = 20,
+                MinAmount = 100
+            });
+            */
+
+        }
+
     }
 }
 
-/*
-protected readonly IConfiguration configuration;
-private string _connectionStringOrName;
-
-public AppDbContext(string connectionStringOrName)
-{
-    this._connectionStringOrName = connectionStringOrName;
-    var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-    configuration = builder;
-}
-public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions) { }
-protected override void OnConfiguring(DbContextOptionsBuilder options)
-{
-    // connect to sqlite database
-    string connectionString = string.Empty;
-    connectionString = configuration.GetConnectionString("DbContext");
-    var result = options.UseSqlite(connectionString);
-}
-protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    base.OnModelCreating(modelBuilder);
-}*/
