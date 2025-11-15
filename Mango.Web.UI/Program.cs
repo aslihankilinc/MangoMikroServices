@@ -7,8 +7,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
 
+builder.Services.AddHttpClient();
+
+//Servis URL'leri appsettings.json dosyasýndan okunuyor7
+
+builder.Services.AddHttpClient<ICouponService, CouponService>();
+builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
+StaticBase.CouponApiBase=builder.Configuration["ServiceUrls:CouponApi"];
+
+
+//
+
+//servisler önce eklenmeli
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -16,13 +29,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-//Servis URL'leri appsettings.json dosyasýndan okunuyor
-builder.Services.AddHttpClient<ICouponService,CouponService>();
-StaticBase.CouponApiBase=builder.Configuration["ServiceUrls:CouponApi"];
-
-builder.Services.AddScoped<IBaseService, BaseService>();
-builder.Services.AddScoped<ICouponService, CouponService>();
-//
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

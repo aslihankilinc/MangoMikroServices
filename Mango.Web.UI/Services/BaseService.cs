@@ -22,7 +22,7 @@ namespace Mango.Web.UI.Services
             {
                 HttpClient client = _httpClientFactory.CreateClient("MangoAPI");
                 HttpRequestMessage message = new();
-                message.Headers.Add("Accept", "application/json");
+                message.Headers.Add("Accept", "text/plain");
                 //token
 
                 message.RequestUri = new Uri(requestDto.Url);
