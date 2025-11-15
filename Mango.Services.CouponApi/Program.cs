@@ -38,6 +38,8 @@ void ApplyMigrations()
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        ///<summary>bekleyen migration islemi varsa yap yoksa hata fýrlatýr</summary>
+        if(dbContext.Database.GetPendingMigrations().Count()>0)
         dbContext.Database.Migrate();
     }
 }
