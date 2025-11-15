@@ -1,5 +1,8 @@
-﻿using Mango.Services.CouponApi.Data;
+﻿using AutoMapper;
+using Mango.Services.CouponApi.Data;
+using Mango.Services.CouponApi.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Mango.Services.CouponApi.Controllers
 {
@@ -8,41 +11,48 @@ namespace Mango.Services.CouponApi.Controllers
     public class CouponAPIController : ControllerBase
     {
         private readonly AppDbContext _db;
-        public CouponAPIController(AppDbContext db)
+        private ResponseDto _response;
+        private  IMapper _mapper;
+        public CouponAPIController(AppDbContext db,IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
+            _response = new ResponseDto();   
         }
 
         [HttpGet]
-        public object GetCoupons()
+        public ResponseDto GetCoupons()
         {
             try
             {
-                var list = _db.Coupons.ToList();
-                return list;
+                var list = _db.Coupons.ToList();                
+                _response.Result = _mapper.Map<List<CouponDto>>(list);
+
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
             }
-            return Ok();
+            return _response;
         }
 
 
         [HttpGet]
         [Route("{id:int}")]
-        public object GetCoupons(int id)
+        public ResponseDto GetCoupons(int id)
         {
             try
             {
                 var item = _db.Coupons.FirstOrDefault(w=>w.CouponId==id);
-                return item;
+                _response.Result = _mapper.Map<CouponDto>(item);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
             }
-            return Ok();
+            return _response;
         }
     }
 }
