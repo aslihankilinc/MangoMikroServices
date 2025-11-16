@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Mango.Services.AuthApi.IContract;
+using Mango.Services.AuthApi.Models.Dto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Mango.Services.AuthApi.Controllers
 {
@@ -7,10 +10,25 @@ namespace Mango.Services.AuthApi.Controllers
     [ApiController]
     public class AuthApiController : ControllerBase
     {
-        [HttpGet("register")]
-        public IActionResult Register()
+        private readonly IAuthService _authService;
+        protected ResponseDto _response;
+        public AuthApiController(IAuthService authService)
         {
-            return Ok(new { status = "Auth API is running." });
+            _authService = authService;
+            _response = new ResponseDto();
+        }
+
+        [HttpGet("register")]
+        public async Task<IActionResult> Register([FromBody]RegistrationRequestDto model)
+        {
+            var errorMessage = await _authService.Register(model);
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                _response.IsSuccess = false;
+                _response.Message = errorMessage;
+                return BadRequest(_response);
+            }
+            return Ok(_response);
         }
 
         [HttpPost("login")]
