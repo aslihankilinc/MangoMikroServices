@@ -94,7 +94,7 @@ namespace Mango.Services.CouponApi.Controllers
 
 
         [HttpPut]
-        public ResponseDto put([FromBody] CouponDto couponDto)
+        public ResponseDto Put([FromBody] CouponDto couponDto)
         {
             try
             {
@@ -113,6 +113,7 @@ namespace Mango.Services.CouponApi.Controllers
         }
 
         [HttpDelete]
+        [Route("{id:int}")]
         public ResponseDto Delete(int id)
         {
             try

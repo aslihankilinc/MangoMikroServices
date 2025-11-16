@@ -29,13 +29,13 @@ namespace Mango.Web.UI.Controllers
 
             return View(list);
         }
-        public async Task<IActionResult> CoupunCreated()
+        public async Task<IActionResult> CouponCreated()
         {
             return View();
         }
 
        [HttpPost]
-        public async Task<IActionResult> CoupunCreated(CouponDto model)
+        public async Task<IActionResult> CouponCreated(CouponDto model)
         {
             if (ModelState.IsValid)
             {
@@ -50,6 +50,38 @@ namespace Mango.Web.UI.Controllers
                 {
                     TempData["error"] = response?.Message;
                 }
+            }
+            return View(model);
+        }
+        public async Task<IActionResult> CouponDeleted(int couponId)
+        {
+            ResponseDto? response = await _couponService.GetCouponByIdAsync(couponId);
+
+            if (response != null && response.IsSuccess)
+            {
+                CouponDto? model = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(response.Result));
+                return View(model);
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CouponDeleted(CouponDto model)
+        {
+            ResponseDto? response = await _couponService.DeleteCouponsAsync(model.CouponId);
+
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Coupon deleted successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
             }
             return View(model);
         }
