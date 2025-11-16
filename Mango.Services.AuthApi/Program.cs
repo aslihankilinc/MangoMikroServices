@@ -3,6 +3,7 @@ using Mango.Services.AuthApi.Data;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using Microsoft.AspNetCore.Identity;
+using Mango.Services.AuthApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MangoContext"));
 });
 //Identity DB baglami yapýlandýrma
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
