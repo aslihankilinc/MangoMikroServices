@@ -16,6 +16,7 @@ namespace Mango.Services.AuthApi.Controllers
             _response = new ResponseDto();
         }
 
+        //kullanıcı oluştrma
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegistrationRequestDto model)
         {
@@ -40,6 +41,20 @@ namespace Mango.Services.AuthApi.Controllers
                 return BadRequest(_response);
             }
             _response.Result = loginResponse;
+            return Ok(_response);
+
+        }
+//rol olusturma
+        [HttpPost("AssignRole")]
+        public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDto model)
+        {
+            var assignRoleSuccessful = await _authService.AssignRole(model.Email, model.Role.ToUpper());
+            if (!assignRoleSuccessful)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Olusturulamadı";
+                return BadRequest(_response);
+            }
             return Ok(_response);
 
         }
