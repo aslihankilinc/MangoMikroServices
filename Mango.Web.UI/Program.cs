@@ -15,7 +15,10 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICouponService, CouponService>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
-StaticBase.CouponApiBase=builder.Configuration["ServiceUrls:CouponApi"];
+builder.Services.AddScoped<IAuthService, AuthService>();
+//appsettings servin kostugu port url'li
+StaticBase.CouponApiBase = builder.Configuration["ServiceUrls:CouponApi"];
+StaticBase.AuthApiBase = builder.Configuration["ServiceUrls:AuthApiBase"];
 
 
 //

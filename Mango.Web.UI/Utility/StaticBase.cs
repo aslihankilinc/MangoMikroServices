@@ -3,5 +3,7 @@
     public class StaticBase
     {
         public static string CouponApiBase { get; set; }
-}
+
+        public static string AuthApiBase { get; set; }
+    }
 }

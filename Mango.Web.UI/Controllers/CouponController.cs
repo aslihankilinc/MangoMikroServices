@@ -1,5 +1,6 @@
 ﻿using Mango.Web.UI.IContract;
 using Mango.Web.UI.Models.Dto;
+using Mango.Web.UI.Models.Dto.Coupon;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Reflection;
