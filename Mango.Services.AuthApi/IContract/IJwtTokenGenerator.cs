@@ -1,8 +1,8 @@
-﻿using Mango.Services.AuthAPI.Models;
+﻿using Mango.Services.AuthApi.Models;
 
 namespace Mango.Services.AuthApi.IContract
 {
-    public class IJwtTokenGenerator
+    public interface IJwtTokenGenerator
     {
         string GenerateToken(ApplicationUser applicationUser, IEnumerable<string> roles);
     }

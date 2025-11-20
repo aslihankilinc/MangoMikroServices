@@ -12,7 +12,8 @@ namespace Mango.Services.AuthApi.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthService(AppDbContext db, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthService(AppDbContext db,
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _db = db;
             _userManager = userManager;
@@ -36,14 +37,12 @@ namespace Mango.Services.AuthApi.Services
             }
 
             //if user was found , Generate JWT Token
-            var roles = await _userManager.GetRolesAsync(user);
-           // var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
             UserDto userDTO = new()
             {
                 Email = user.Email,
                 Id = user.Id,
-                UserName = user.UserName,
+                Name = user.Name,
                 PhoneNumber = user.PhoneNumber
             };
 
@@ -60,23 +59,25 @@ namespace Mango.Services.AuthApi.Services
         {
             ApplicationUser user = new()
             {
-                UserName = registrationRequestDto.Name,
+                UserName = registrationRequestDto.Email,
                 Email = registrationRequestDto.Email,
                 NormalizedEmail = registrationRequestDto.Email.ToUpper(),
+                Name = registrationRequestDto.Name,
                 PhoneNumber = registrationRequestDto.PhoneNumber
             };
+
             try
             {
                 var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
                 if (result.Succeeded)
                 {
-                    var userToReturn = _db.ApplicationUsers.First(u => u.Email == registrationRequestDto.Email);
+                    var userToReturn = _db.ApplicationUsers.First(u => u.UserName == registrationRequestDto.Email);
 
                     UserDto userDto = new()
                     {
                         Email = userToReturn.Email,
                         Id = userToReturn.Id,
-                        UserName = userToReturn.UserName,
+                        Name = userToReturn.Name,
                         PhoneNumber = userToReturn.PhoneNumber
                     };
 
@@ -96,5 +97,5 @@ namespace Mango.Services.AuthApi.Services
             return "Error Encountered";
         }
     }
-    }
 }
+

@@ -1,16 +1,16 @@
 using AutoMapper;
 using Mango.Services.AuthApi.Data;
+using Mango.Services.AuthApi.IContract;
+using Mango.Services.AuthApi.Models;
+using Mango.Services.AuthApi.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
-using Microsoft.AspNetCore.Identity;
-using Mango.Services.AuthApi.Models;
-using Mango.Services.AuthApi.IContract;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddScoped<IAuthService,IAuthService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,15 +22,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 //Identity DB baglami yapýlandýrma
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-
-
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IAuthService, AuthService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 

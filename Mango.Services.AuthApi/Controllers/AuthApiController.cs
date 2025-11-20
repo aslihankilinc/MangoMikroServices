@@ -16,7 +16,7 @@ namespace Mango.Services.AuthApi.Controllers
             _response = new ResponseDto();
         }
 
-        [HttpGet("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegistrationRequestDto model)
         {
             var errorMessage = await _authService.Register(model);
@@ -36,7 +36,7 @@ namespace Mango.Services.AuthApi.Controllers
             if (loginResponse.User == null)
             {
                 _response.IsSuccess = false;
-                _response.Message = "Username or password is incorrect";
+                _response.Message = "Kullanici adi ya da şifre hatası";
                 return BadRequest(_response);
             }
             _response.Result = loginResponse;
