@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 
 namespace Mango.Web.UI.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController(IAuthService _authService) : Controller
     {
-        private readonly IAuthService _authService;
+
         [HttpGet]
         public IActionResult Login()
         {

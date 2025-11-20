@@ -3,6 +3,7 @@ using Mango.Services.AuthApi.IContract;
 using Mango.Services.AuthApi.Models;
 using Mango.Services.AuthApi.Models.Dto;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Services.AuthApi.Services
 {
@@ -21,7 +22,6 @@ namespace Mango.Services.AuthApi.Services
             _roleManager = roleManager;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
-
         public async Task<bool> AssignRole(string email, string roleName)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
@@ -37,7 +37,7 @@ namespace Mango.Services.AuthApi.Services
             }
             return false;
         }
-
+      
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
@@ -70,7 +70,6 @@ namespace Mango.Services.AuthApi.Services
 
             return loginResponseDto;
         }
-
         public async Task<string> Register(RegistrationRequestDto registrationRequestDto)
         {
             ApplicationUser user = new()
