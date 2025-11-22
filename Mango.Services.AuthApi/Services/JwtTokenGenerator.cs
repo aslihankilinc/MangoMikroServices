@@ -27,10 +27,11 @@ namespace Mango.Services.AuthApi.Services
             //key'i olusturacagımız objeler
             var claimsList = new List<Claim>
             {
+                new Claim(JwtRegisteredClaimNames.Email,applicationUser.Email),
                 new Claim(JwtRegisteredClaimNames.Name,applicationUser.UserName),
                 new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id)
             };
-
+            claimsList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Audience = _jwtOptions.Audience,

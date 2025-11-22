@@ -1,4 +1,6 @@
 ﻿using Mango.Web.UI.Models;
+using Mango.Web.UI.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,6 +20,8 @@ namespace Mango.Web.UI.Controllers
             return View();
         }
 
+        //rol eklendi
+        [Authorize(Roles = Const.Admin)]
         public IActionResult Privacy()
         {
             return View();

@@ -2,12 +2,14 @@
 using Mango.Services.CouponApi.Data;
 using Mango.Services.CouponApi.Models;
 using Mango.Services.CouponApi.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Services.CouponApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CouponAPIController : ControllerBase
     {
         private readonly AppDbContext _db;
