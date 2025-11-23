@@ -6,6 +6,9 @@ using Mango.Services.CouponApi;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Mango.Services.CouponApi.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 Batteries.Init();
 // Add services to the container.
@@ -17,44 +20,45 @@ builder.Services.AddDbContext<Mango.Services.CouponApi.Data.AppDbContext>(option
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-//AutoMapper Config Islemleri
 
+
+
+
+
+//Swagger ayarlarý
+//token ile dogrulama icin swagger yapýlandýrmalarýný da degistiriyoruz
+builder.Services.AddSwaggerGen(option =>
+{
+    option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {{
+        new OpenApiSecurityScheme
+        {
+            Reference=new OpenApiReference
+            {
+                Type=ReferenceType.SecurityScheme,
+                Id=JwtBearerDefaults.AuthenticationScheme
+            } }, new string[]{}
+        }
+    });
+});
+
+
+//AutoMapper Config Islemleri
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 //AutoMapper Config Islemleri
 
 //Authentication ve Authorization ayarlarý
-var secret = builder.Configuration.GetValue<string>("ApiSettings:Secret");
-var issuer = builder.Configuration.GetValue<string>("ApiSettings:Issuer");
-var audience = builder.Configuration.GetValue<string>("ApiSettings:Audience");
-var key = Encoding.ASCII.GetBytes(secret);
-
-
-//kullanýcý kimliðini cookie deðil, token
-//RequireHttpsMetadata = false    Geliþtirme aþamasýnda HTTPS zorunluluðunu kapatýr. (Prod’da true olmalý)
-//SaveToken = true	Doðrulanan token'ý HttpContext içine kaydeder (ileride eriþmek istersen).
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {   //Token’ý imzalayan anahtar (secret key) doðrulanacak
-        ValidateIssuerSigningKey = true,
-        //backend’de oluþturulan key
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidIssuer = issuer,
-        ValidAudience = audience
-    };
-}
-    );
-
-
+//Extension method kullanarak ayarlarý taþýyoruz
+builder.AppAuthetication();
 
 var app = builder.Build();
 

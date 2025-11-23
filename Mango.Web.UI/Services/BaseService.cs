@@ -3,8 +3,6 @@ using Mango.Web.UI.Models.Dto;
 using Mango.Web.UI.Utility;
 using Newtonsoft.Json;
 using System.Net;
-using System.Net.Http;
-using System.Security.AccessControl;
 using System.Text;
 
 namespace Mango.Web.UI.Services
@@ -12,11 +10,13 @@ namespace Mango.Web.UI.Services
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public BaseService(IHttpClientFactory httpClientFactory)
+        private readonly ITokenService _tokenService;
+        public BaseService(IHttpClientFactory httpClientFactory, ITokenService tokenService)
         {
             _httpClientFactory = httpClientFactory;
+            _tokenService = tokenService;
         }
-        public async Task<ResponseDto> SendAsync(RequestDto requestDto)
+        public async Task<ResponseDto> SendAsync(RequestDto requestDto, bool isBerarer = true)
         {
             try
             {
@@ -24,6 +24,14 @@ namespace Mango.Web.UI.Services
                 HttpRequestMessage message = new();
                 message.Headers.Add("Accept", "text/plain");
                 //token
+                //alt servislerde authorization erisimi
+                //Token Bearer olarak tanımlandı
+                if (isBerarer)
+                {
+                    var token = _tokenService.GetToken();
+                    message.Headers.Add("Authorization", $"Bearer {token}");
+
+                }
 
                 message.RequestUri = new Uri(requestDto.Url);
                 if (requestDto.Data != null)
@@ -50,7 +58,7 @@ namespace Mango.Web.UI.Services
                      { HttpStatusCode.Unauthorized, "Unauthorized" },
                      { HttpStatusCode.InternalServerError, "Internal Server Error" }
                  };
-                 
+
                 if (errorMessages.TryGetValue(apiResponse.StatusCode, out var msg))
                 {
                     return new ResponseDto { IsSuccess = false, Message = msg };
