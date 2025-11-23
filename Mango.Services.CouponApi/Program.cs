@@ -3,16 +3,14 @@ using SQLitePCL;
 using Mango.Services.CouponApi.Data;
 using AutoMapper;
 using Mango.Services.CouponApi;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Mango.Services.CouponApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 Batteries.Init();
 // Add services to the container.
-builder.Services.AddDbContext<Mango.Services.CouponApi.Data.AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("MangoContext"));
 });

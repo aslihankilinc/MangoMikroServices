@@ -24,6 +24,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 //appsettings servin kostugu port url'li
 StaticBase.CouponApiBase = builder.Configuration["ServiceUrls:CouponAPI"];
 StaticBase.AuthApiBase = builder.Configuration["ServiceUrls:AuthAPI"];
+StaticBase.ProductApiBase = builder.Configuration["ServiceUrls:ProductAPI"];
 //Uygulama kimlik doðrulama için cookie (çerez) yöntemini kullanacak
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
