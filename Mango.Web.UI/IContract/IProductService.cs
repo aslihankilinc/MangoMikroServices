@@ -1,4 +1,5 @@
 ﻿using Mango.Web.UI.Models.Dto;
+using Mango.Web.UI.Models.Dto.Product;
 
 namespace Mango.Web.UI.IContract
 {
