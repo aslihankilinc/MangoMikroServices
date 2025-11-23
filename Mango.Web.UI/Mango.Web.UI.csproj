@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Dto\Product\**" />
+    <Content Remove="Models\Dto\Product\**" />
+    <EmbeddedResource Remove="Models\Dto\Product\**" />
+    <None Remove="Models\Dto\Product\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\Dto\Product\ProductDto.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
   </ItemGroup>

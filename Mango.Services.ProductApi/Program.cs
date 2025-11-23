@@ -1,6 +1,7 @@
 using AutoMapper;
 using Mango.Services.ProductApi;
 using Mango.Services.ProductApi.Data;
+using Mango.Services.ProductApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 Batteries.Init();
 // Add services to the container.
-builder.Services.AddDbContext<Mango.Services.ProductApi.Data.AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("MangoContext"));
 });
@@ -63,8 +64,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+builder.AppAuthetication();
 app.UseAuthorization();
+//default dosya yolu
+app.UseStaticFiles();
 
 app.MapControllers();
 
