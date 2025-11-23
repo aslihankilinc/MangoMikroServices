@@ -108,10 +108,10 @@ namespace Mango.Web.UI.Controllers
                 jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
 
             //Roller ekleniyor
-            foreach (var role in jwt.Claims.Where(u => u.Type == "role").Select(u => u.Value))
-            {
-                identity.AddClaim(new Claim("role", role));
-            }
+            identity.AddClaim(new Claim(ClaimTypes.Name,
+               jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Role,
+                jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
 
             //Kullanıcı “principal” oluşturuluyor
             //ClaimsPrincipal, kimlik bilgilerini (identity) ve claim’leri taşıyan nesnedir

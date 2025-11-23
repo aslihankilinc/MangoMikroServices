@@ -31,8 +31,8 @@
                                     Content Management
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">Coupon</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="ProductIndex">Product</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">Kuponlar</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">Ürünler</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 </ul>
                             </li>
@@ -61,7 +61,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link " href="#">@User.Identity.Name</a>
+                                <a class="nav-link " href="#">Hoş geldin @User.Identity.Name</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link " asp-controller="Auth" asp-action="Logout">Çıkış</a>
