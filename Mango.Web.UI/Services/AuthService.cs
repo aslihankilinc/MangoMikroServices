@@ -29,7 +29,7 @@ namespace Mango.Web.UI.Services
             {
                 ApiType = EnumApiType.POST,
                 Data = loginRequestDto,
-                Url = StaticBase.AuthApiBase + "/api/auth/login"
+                Url = StaticBase.AuthApiBase + "/api/auth/Login"
             });
         }
 
@@ -39,7 +39,7 @@ namespace Mango.Web.UI.Services
             {
                 ApiType = EnumApiType.POST,
                 Data = registrationRequestDto,
-                Url = StaticBase.AuthApiBase + "/api/auth/register"
+                Url = StaticBase.AuthApiBase + "/api/auth/Register"
             });
         }
     }

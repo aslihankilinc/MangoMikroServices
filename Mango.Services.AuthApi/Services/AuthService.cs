@@ -22,9 +22,9 @@ namespace Mango.Services.AuthApi.Services
             _roleManager = roleManager;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
-        public async Task<bool> AssignRole(string email, string roleName)
+        public async Task<bool> AssignRole(string id, string roleName)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Id==id);
             if (user != null)
             {
                 var roleManager = await _roleManager.RoleExistsAsync(roleName);
@@ -80,7 +80,7 @@ namespace Mango.Services.AuthApi.Services
                 Name = registrationRequestDto.Name,
                 PhoneNumber = registrationRequestDto.PhoneNumber
             };
-
+          
             try
             {
                 var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
@@ -96,6 +96,7 @@ namespace Mango.Services.AuthApi.Services
                         PhoneNumber = userToReturn.PhoneNumber
                     };
 
+                    AssignRole(userDto.Id, registrationRequestDto.Role);
                     return "";
 
                 }
