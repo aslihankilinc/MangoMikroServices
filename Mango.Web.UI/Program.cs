@@ -26,6 +26,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 StaticBase.CouponApiBase = builder.Configuration["ServiceUrls:CouponAPI"];
 StaticBase.AuthApiBase = builder.Configuration["ServiceUrls:AuthAPI"];
 StaticBase.ProductApiBase = builder.Configuration["ServiceUrls:ProductAPI"];
+StaticBase.ShoppingCartApiBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"];
 //Uygulama kimlik doðrulama için cookie (çerez) yöntemini kullanacak
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
