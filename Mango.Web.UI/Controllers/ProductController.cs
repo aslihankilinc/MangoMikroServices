@@ -98,7 +98,7 @@ namespace Mango.Web.UI.Controllers
 
                 if (response != null && response.IsSuccess)
                 {
-                    TempData["success"] = "Product updated successfully";
+                    TempData["success"] = "Ürün Güncellendi";
                     return RedirectToAction(nameof(Index));
                 }
                 else

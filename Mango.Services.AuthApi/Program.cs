@@ -41,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//  Static files (örneðin resim veya js dosyalarý)
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

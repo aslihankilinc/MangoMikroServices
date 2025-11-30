@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mango.Service.Product.Utility;
 using Mango.Services.ProductApi.Data;
 using Mango.Services.ProductApi.Models;
 using Mango.Services.ProductApi.Models.Dto;
@@ -20,10 +21,8 @@ namespace Mango.Services.ProductApi.Controllers
             this.mapper = mapper;
             this._response = new ResponseDto();
         }
-
-
-        [HttpGet]
-        public ResponseDto Get()
+        [HttpGet("getProductList")]
+        public ResponseDto GetProductList()
         {
             try
             {
@@ -38,13 +37,8 @@ namespace Mango.Services.ProductApi.Controllers
             return _response;
 
         }
-
-
-
-
-        [HttpGet]
-        [Route("{id:int}")]
-        public ResponseDto Get(int id)
+        [HttpGet("getProduct/{id:int}")]
+        public ResponseDto GetProduct(int id)
         {
             try
             {
@@ -59,14 +53,15 @@ namespace Mango.Services.ProductApi.Controllers
             return _response;
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public ResponseDto Post([FromBody] ProductDto productDto)
+        [HttpPost("created")]
+        [Authorize(Roles =Const.Admin )]
+        public ResponseDto CreatedProduct([FromBody] ProductDto productDto)
         {
             try
             {
                 var product = mapper.Map<Models.Product>(productDto);
-                _db.Product.Add(product);
+                if (product.ProductId==0)
+                    _db.Product.Add(product);
                 _db.SaveChanges();
                 if (productDto.Image is not null)
                 {
@@ -99,10 +94,9 @@ namespace Mango.Services.ProductApi.Controllers
         }
 
 
-        [HttpDelete]
-        [Route("{id:int}")]
-        [Authorize(Roles = "ADMIN")]
-        public ResponseDto Delete(int id)
+        [HttpDelete("deleted/{id:int}")]
+        [Authorize(Roles = Const.Admin)]
+        public ResponseDto Deleted(int id)
         {
             try
             {

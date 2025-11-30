@@ -9,25 +9,23 @@ using SQLitePCL;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 Batteries.Init();
-// Add services to the container.
+
+// DBContext
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("MangoContext"));
 });
 
-// Add services to the container.
-
+//  Controllers ve Swagger
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
     option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+        Description = "Enter the Bearer token like: Bearer <JWT>",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
@@ -47,16 +45,16 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-
-
-//AutoMapper Config Islemleri
+// AutoMapper
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
-//AutoMapper Config Islemleri
+
+// JWT Authentication Extension
+builder.AppAuthetication();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Development ortamýnda Swagger aktif
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -64,9 +62,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-builder.AppAuthetication();
+
+//  Authentication önce olmalý
+app.UseAuthentication();
 app.UseAuthorization();
-//default dosya yolu
+
+//  Static files (örneðin resim veya js dosyalarý)
 app.UseStaticFiles();
 
 app.MapControllers();
@@ -75,14 +76,15 @@ ApplyMigrations();
 
 app.Run();
 
-/// <summary>Varolan migrasyonlari uygular</summary>
+/// <summary>
+/// Varolan migrasyonlari uygular
+/// </summary>
 void ApplyMigrations()
 {
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        ///<summary>bekleyen migration islemi varsa yap yoksa hata fýrlatýr</summary>
-        if (dbContext.Database.GetPendingMigrations().Count() > 0)
+        if (dbContext.Database.GetPendingMigrations().Any())
             dbContext.Database.Migrate();
     }
 }
