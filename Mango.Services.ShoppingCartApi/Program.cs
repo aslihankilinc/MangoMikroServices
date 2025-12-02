@@ -21,10 +21,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
-//ProductService yapýlandirma
+//ProductService yapilandirma
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddHttpClient("Product",u=>u.BaseAddress=
                                new Uri(builder.Configuration["ServicesUrls:ProductAPI"]));
+
+//CouponService yapilandirma
+builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddHttpClient("Coupon", u => u.BaseAddress = 
+                                new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -15,21 +15,21 @@ namespace Mango.Services.ShoppingCartApi.Controllers
     {
         private readonly AppDbContext _db;
         private IMapper mapper;
-        private ResponseDto _response;
         private IProductService _productService;
-        public CartAPIController(AppDbContext db, IMapper mapper,IProductService productService)
+        private ICouponService _couponService;
+        public CartAPIController(AppDbContext db, IMapper mapper,IProductService productService, ICouponService couponService)
         {
             _db = db;
             this.mapper = mapper;
-            this._response = new ResponseDto();
             _productService = productService;
+            _couponService = couponService;
         }
 
         //CartHeader → sepetin genel bilgisi (hangi kullanıcıya ait, ne zaman oluşturuldu, toplam fiyat vs.)
         // CartDetails → o sepetteki ürünlerin tek tek detayları(ürün ID, miktar vs.)
         //Yeni bir sepet oluştur ve o sepete bir ürün ekle
         [HttpPost("upsertCart")]
-        public async Task<ResponseDto> UpserCart(CartDto cartDto)
+        public async Task<ResponseDto> UpsertCart(CartDto cartDto)
         {
             ResponseDto response = new();
             try
@@ -137,13 +137,46 @@ namespace Mango.Services.ShoppingCartApi.Controllers
                     item.Product = productList.FirstOrDefault(p => p.ProductId == item.ProductId);
                     cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
-
+                //kupon var mı
+                if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+                {
+                    var coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
+                    if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
+                    {
+                        cart.CartHeader.CartTotal -= coupon.DiscountAmount;
+                        cart.CartHeader.Discount = coupon.DiscountAmount;
+                    }
+                }
                 response.Result = cart;
             }
             catch (Exception ex)
             {
                 response.IsSuccess = false;
                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        //kuponu uygula
+
+        [HttpPost("ApplyCart")]
+        public async Task<object> ApplyCart([FromBody] CartDto cartDto)
+        {
+            ResponseDto response = new();
+            try
+            {
+                var cartHeaderFromDb = await _db.CartHeaders
+                    .FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
+                cartHeaderFromDb.CouponCode = cartDto.CartHeader.CouponCode;
+                _db.CartHeaders.Update(cartHeaderFromDb);
+                await _db.SaveChangesAsync();
+                response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.Message;
+                
             }
             return response;
         }
