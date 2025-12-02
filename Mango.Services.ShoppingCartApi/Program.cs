@@ -2,6 +2,8 @@ using AutoMapper;
 using Mango.Services.ShoppingCartApi;
 using Mango.Services.ShoppingCartApi.Data;
 using Mango.Services.ShoppingCartApi.Extensions;
+using Mango.Services.ShoppingCartApi.IContract;
+using Mango.Services.ShoppingCartApi.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -19,6 +21,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+//ProductService yapýlandirma
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddHttpClient("Product",u=>u.BaseAddress=
+                               new Uri(builder.Configuration["ServicesUrls:ProductAPI"]));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>

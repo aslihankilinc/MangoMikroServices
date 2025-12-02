@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Mango.Services.ShoppingCartApi.Data;
+using Mango.Services.ShoppingCartApi.IContract;
 using Mango.Services.ShoppingCartApi.Models;
 using Mango.Services.ShoppingCartApi.Models.Dto;
 using Microsoft.AspNetCore.Http;
@@ -14,10 +15,14 @@ namespace Mango.Services.ShoppingCartApi.Controllers
     {
         private readonly AppDbContext _db;
         private IMapper mapper;
-        public CartAPIController(AppDbContext db, IMapper mapper)
+        private ResponseDto _response;
+        private IProductService _productService;
+        public CartAPIController(AppDbContext db, IMapper mapper,IProductService productService)
         {
             _db = db;
             this.mapper = mapper;
+            this._response = new ResponseDto();
+            _productService = productService;
         }
 
         //CartHeader → sepetin genel bilgisi (hangi kullanıcıya ait, ne zaman oluşturuldu, toplam fiyat vs.)
@@ -125,9 +130,11 @@ namespace Mango.Services.ShoppingCartApi.Controllers
                 };
                 cart.CartDetails = mapper.Map<IEnumerable<CartDetailsDto>>(_db.CartDetails
                     .Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
+                var productList = await _productService.GetProducts();
 
                 foreach (var item in cart.CartDetails)
                 {
+                    item.Product = productList.FirstOrDefault(p => p.ProductId == item.ProductId);
                     cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
 
