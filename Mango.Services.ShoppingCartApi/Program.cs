@@ -1,9 +1,9 @@
 using AutoMapper;
-using Mango.Services.ShoppingCartApi;
-using Mango.Services.ShoppingCartApi.Data;
-using Mango.Services.ShoppingCartApi.Extensions;
-using Mango.Services.ShoppingCartApi.IContract;
-using Mango.Services.ShoppingCartApi.Service;
+using Mango.Services.CartApi;
+using Mango.Services.CartApi.Data;
+using Mango.Services.CartApi.Extensions;
+using Mango.Services.CartApi.IContract;
+using Mango.Services.CartApi.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Mango.Services.ShoppingCartApi.Data;
-using Mango.Services.ShoppingCartApi.IContract;
-using Mango.Services.ShoppingCartApi.Models;
-using Mango.Services.ShoppingCartApi.Models.Dto;
+using Mango.Services.CartApi.Data;
+using Mango.Services.CartApi.IContract;
+using Mango.Services.CartApi.Models;
+using Mango.Services.CartApi.Models.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mango.Services.ShoppingCartApi.Controllers
+namespace Mango.Services.CartApi.Controllers
 {
     [Route("api/cart")]
     [ApiController]
@@ -159,7 +159,7 @@ namespace Mango.Services.ShoppingCartApi.Controllers
 
         //kuponu uygula
 
-        [HttpPost("ApplyCart")]
+        [HttpPost("applyCart")]
         public async Task<object> ApplyCart([FromBody] CartDto cartDto)
         {
             ResponseDto response = new();

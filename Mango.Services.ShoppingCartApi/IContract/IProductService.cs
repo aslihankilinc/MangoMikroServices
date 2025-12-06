@@ -1,6 +1,6 @@
-﻿using Mango.Services.ShoppingCartApi.Models.Dto;
+﻿using Mango.Services.CartApi.Models.Dto;
 
-namespace Mango.Services.ShoppingCartApi.IContract
+namespace Mango.Services.CartApi.IContract
 {
     public interface IProductService
     {
