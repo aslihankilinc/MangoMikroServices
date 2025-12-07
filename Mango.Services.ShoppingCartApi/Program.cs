@@ -23,14 +23,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 //ProductService yapilandirma
 builder.Services.AddScoped<IProductService, ProductService>();
+//Handler ekleme
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<AuthHttpClientHandler>();
+
 builder.Services.AddHttpClient("Product",u=>u.BaseAddress=
-                               new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+                               new Uri(builder.Configuration["ServiceUrls:ProductAPI"]))
+                               .AddHttpMessageHandler<AuthHttpClientHandler>();
 
 //CouponService yapilandirma
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddHttpClient("Coupon", u => u.BaseAddress = 
-                                new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
-
+                                new Uri(builder.Configuration["ServiceUrls:CouponAPI"]))
+                                 .AddHttpMessageHandler<AuthHttpClientHandler>(); 
+ 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
