@@ -34,33 +34,35 @@ namespace Mango.Services.CartApi.Controllers
             ResponseDto response = new();
             try
             {
-                var cartHeader = await _db.CartHeaders.AsNoTracking()
-                                   .FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
-                if (cartHeader is null)
+                var cartHeaderFromDb = await _db.CartHeaders.AsNoTracking()
+                    .FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
+                if (cartHeaderFromDb == null)
                 {
-                    CartHeader cartHeader1 = mapper.Map<CartHeader>(cartDto.CartHeader);
+                    //create header and details
+                    CartHeader cartHeader = mapper.Map<CartHeader>(cartDto.CartHeader);
                     _db.CartHeaders.Add(cartHeader);
                     await _db.SaveChangesAsync();
                     cartDto.CartDetails.First().CartHeaderId = cartHeader.CartHeaderId;
                     _db.CartDetails.Add(mapper.Map<CartDetails>(cartDto.CartDetails.First()));
                     await _db.SaveChangesAsync();
-
                 }
                 else
                 {
-                    //Kullanıcı aynı ürünü tekrar sepete eklerse yeni satır ekleme
-                    //sadece miktarı  artır
+                    //if header is not null
+                    //check if details has same product
                     var cartDetailsFromDb = await _db.CartDetails.AsNoTracking().FirstOrDefaultAsync(
-                      u => u.ProductId == cartDto.CartDetails.First().ProductId &&
-                      u.CartHeaderId == cartHeader.CartHeaderId);
+                        u => u.ProductId == cartDto.CartDetails.First().ProductId &&
+                        u.CartHeaderId == cartHeaderFromDb.CartHeaderId);
                     if (cartDetailsFromDb == null)
                     {
-                        cartDto.CartDetails.First().CartHeaderId = cartHeader.CartHeaderId;
+                        //create cartdetails
+                        cartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
                         _db.CartDetails.Add(mapper.Map<CartDetails>(cartDto.CartDetails.First()));
                         await _db.SaveChangesAsync();
                     }
                     else
                     {
+                        //update count in cart details
                         cartDto.CartDetails.First().Count += cartDetailsFromDb.Count;
                         cartDto.CartDetails.First().CartHeaderId = cartDetailsFromDb.CartHeaderId;
                         cartDto.CartDetails.First().CartDetailsId = cartDetailsFromDb.CartDetailsId;

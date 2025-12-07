@@ -1,14 +1,15 @@
 ﻿using Mango.Web.UI.IContract;
 using Mango.Web.UI.Models;
 using Mango.Web.UI.Models.Dto;
-using Mango.Web.UI.Models.Dto.Product;
 using Mango.Web.UI.Models.Dto.Cart;
+using Mango.Web.UI.Models.Dto.Product;
 using Mango.Web.UI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-
+using System.Security.Claims;
+using static Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 namespace Mango.Web.UI.Controllers
 {
     public class HomeController : Controller
@@ -66,10 +67,34 @@ namespace Mango.Web.UI.Controllers
         [ActionName("productDetails")]
         public async Task<IActionResult> ProductDetails(ProductDto productDto)
         {
-            CartDto cartDto=new CartDto()
+            CartDto cartDto = new CartDto()
             {
-                CartHeader =new CartHeaderDto()
+                CartHeader = new CartHeaderDto()
+                {
+                    UserId = User.FindFirstValue(Sub)
+                }
+            };
+            CartDetailsDto cartDetails = new CartDetailsDto()
+            {
+                Count = productDto.Count,
+                ProductId = productDto.ProductId,
+            };
+            List<CartDetailsDto> cartDetailsDtos = new() { cartDetails };
+            cartDto.CartDetails = cartDetailsDtos;
+
+            ResponseDto? response = await _cartService.UpsertCartAsync(cartDto);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Ürün sepete eklendi";
+                return RedirectToAction(nameof(Index));
             }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            var result = await _productService.GetProductByIdAsync(productDto.ProductId);
+            productDto = JsonConvert.DeserializeObject<ProductDto>(result.Result.ToString());
+            return View(productDto);
         }
 
 

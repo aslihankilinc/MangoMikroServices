@@ -22,6 +22,7 @@ builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartService,CartService>();
 //appsettings servin kostugu port url'li
 StaticBase.CouponApiBase = builder.Configuration["ServiceUrls:CouponAPI"];
 StaticBase.AuthApiBase = builder.Configuration["ServiceUrls:AuthAPI"];
