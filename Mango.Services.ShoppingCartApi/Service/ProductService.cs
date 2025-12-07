@@ -1,6 +1,7 @@
 ﻿using Mango.Services.CartApi.IContract;
 using Mango.Services.CartApi.Models.Dto;
 using Newtonsoft.Json;
+using System.Linq.Expressions;
 using System.Net.Http;
 
 namespace Mango.Services.CartApi.Service
@@ -14,15 +15,17 @@ namespace Mango.Services.CartApi.Service
         }
         public async Task<List<ProductDto>> GetProducts()
         {
-            var client = _httpClient.CreateClient("Product");
-            var request = await client.GetAsync("/api/Product");
-            var apiContent=await request.Content.ReadAsStringAsync();
-            var response=JsonConvert.DeserializeObject<ResponseDto>(apiContent);
-            if (response.IsSuccess)
-            {
            
-                return JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result));
-            }
+                var client = _httpClient.CreateClient("Product");
+                var request = await client.GetAsync($"/api/product/getProductList");
+                var apiContent = await request.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
+                if (response.IsSuccess)
+                {
+
+                    return JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result));
+                }
+           
             return new List<ProductDto>();
         }
     }

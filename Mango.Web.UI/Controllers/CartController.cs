@@ -1,9 +1,11 @@
 ﻿using Mango.Web.UI.IContract;
+using Mango.Web.UI.Models.Dto;
 using Mango.Web.UI.Models.Dto.Cart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Mango.Web.UI.Controllers
 {
@@ -20,6 +22,30 @@ namespace Mango.Web.UI.Controllers
             return View(await CartLoggedInUser());
         }
 
+
+        public async Task<IActionResult> Remove(int cartDetailsId)
+        {
+            var response = await _cartService.RemoveFromCartAsync(cartDetailsId);
+            if (response is not null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
+        {
+
+            ResponseDto? response = await _cartService.ApplyCouponAsync(cartDto);
+            if (response != null & response.IsSuccess)
+            {
+                TempData["success"] = "Kupon  uygulandı";
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
         private async Task<CartDto> CartLoggedInUser()
         {
             //oturum kullanıcısının id'sini alma
@@ -27,7 +53,7 @@ namespace Mango.Web.UI.Controllers
             var response=await _cartService.GetCartByUserIdAsnyc(userId);
             if(response is not null && response.IsSuccess)
             {
-                CartDto cartDto = System.Text.Json.JsonSerializer.Deserialize<CartDto>(Convert.ToString(response.Result));
+                CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(response.Result));
                 return cartDto;
             }
             return new CartDto();

@@ -24,7 +24,7 @@ builder.Services.AddControllers();
 //ProductService yapilandirma
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddHttpClient("Product",u=>u.BaseAddress=
-                               new Uri(builder.Configuration["ServicesUrls:ProductAPI"]));
+                               new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
 
 //CouponService yapilandirma
 builder.Services.AddScoped<ICouponService, CouponService>();
