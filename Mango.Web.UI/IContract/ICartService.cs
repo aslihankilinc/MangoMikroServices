@@ -1,5 +1,5 @@
 ﻿using Mango.Web.UI.Models.Dto;
-using Mango.Web.UI.Models.Dto.ShoppingCart;
+using Mango.Web.UI.Models.Dto.Cart;
 
 namespace Mango.Web.UI.IContract
 {

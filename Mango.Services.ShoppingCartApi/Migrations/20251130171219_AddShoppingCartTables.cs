@@ -5,7 +5,7 @@
 namespace Mango.Services.CartApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddShoppingCartTables : Migration
+    public partial class AddCartTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

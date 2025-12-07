@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mango.Services.CartApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251130171219_AddShoppingCartTables")]
-    partial class AddShoppingCartTables
+    [Migration("20251130171219_AddCartTables")]
+    partial class AddCartTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

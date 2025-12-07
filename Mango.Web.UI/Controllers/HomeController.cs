@@ -2,9 +2,9 @@
 using Mango.Web.UI.Models;
 using Mango.Web.UI.Models.Dto;
 using Mango.Web.UI.Models.Dto.Product;
+using Mango.Web.UI.Models.Dto.Cart;
 using Mango.Web.UI.Utility;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -15,10 +15,12 @@ namespace Mango.Web.UI.Controllers
     {
        
         private readonly IProductService _productService;
+        private readonly ICartService _cartService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, ICartService cartService)
         {
             _productService = productService;
+            _cartService = cartService;
         }
 
 
@@ -58,6 +60,19 @@ namespace Mango.Web.UI.Controllers
 
             return View(model);
         }
+
+        [Authorize]
+        [HttpPost]
+        [ActionName("productDetails")]
+        public async Task<IActionResult> ProductDetails(ProductDto productDto)
+        {
+            CartDto cartDto=new CartDto()
+            {
+                CartHeader =new CartHeaderDto()
+            }
+        }
+
+
 
 
         //rol eklendi

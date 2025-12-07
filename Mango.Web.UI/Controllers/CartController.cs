@@ -1,5 +1,5 @@
 ﻿using Mango.Web.UI.IContract;
-using Mango.Web.UI.Models.Dto.ShoppingCart;
+using Mango.Web.UI.Models.Dto.Cart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;

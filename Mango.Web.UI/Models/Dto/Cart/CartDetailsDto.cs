@@ -1,7 +1,6 @@
 ﻿using Mango.Web.UI.Models.Dto.Product;
-using Mango.Web.UI.CartApi.Models.Dto;
 
-namespace Mango.Web.UI.Models.Dto
+namespace Mango.Web.UI.Models.Dto.Cart
 {
     public class CartDetailsDto
     {
