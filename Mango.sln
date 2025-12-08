@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.ProductApi",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.CartApi", "Mango.Services.ShoppingCartApi\Mango.Services.CartApi.csproj", "{F4417161-7DBB-4F0D-A6B8-57CD8F6882F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.MessageBus", "Mango.MessageBus\Mango.MessageBus.csproj", "{0C44E671-6392-4AC9-9FBF-6048339C8304}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.EmailApi", "Mango.Services.EmailApi\Mango.Services.EmailApi.csproj", "{6974BDB9-08FB-49EA-A96A-CC5934E323A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,14 @@ Global
 		{F4417161-7DBB-4F0D-A6B8-57CD8F6882F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4417161-7DBB-4F0D-A6B8-57CD8F6882F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4417161-7DBB-4F0D-A6B8-57CD8F6882F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C44E671-6392-4AC9-9FBF-6048339C8304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C44E671-6392-4AC9-9FBF-6048339C8304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C44E671-6392-4AC9-9FBF-6048339C8304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C44E671-6392-4AC9-9FBF-6048339C8304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6974BDB9-08FB-49EA-A96A-CC5934E323A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6974BDB9-08FB-49EA-A96A-CC5934E323A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6974BDB9-08FB-49EA-A96A-CC5934E323A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6974BDB9-08FB-49EA-A96A-CC5934E323A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +69,8 @@ Global
 		{5CE2D0BC-0928-40BB-B2F4-1760B6345E3B} = {F0F5FB34-B7F1-4627-955D-F2E0A2214875}
 		{6AA47F18-1391-484E-B61E-DBFFF8BFC1DF} = {F0F5FB34-B7F1-4627-955D-F2E0A2214875}
 		{F4417161-7DBB-4F0D-A6B8-57CD8F6882F9} = {F0F5FB34-B7F1-4627-955D-F2E0A2214875}
+		{0C44E671-6392-4AC9-9FBF-6048339C8304} = {BF581ECE-0EB5-49C1-8756-42DF652051AB}
+		{6974BDB9-08FB-49EA-A96A-CC5934E323A0} = {F0F5FB34-B7F1-4627-955D-F2E0A2214875}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EC08B6DD-85AF-4D68-9B7F-EB4FECC36023}
