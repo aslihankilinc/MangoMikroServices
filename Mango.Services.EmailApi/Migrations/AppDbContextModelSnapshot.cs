@@ -36,7 +36,7 @@ namespace Mango.Services.EmailApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailLoggers");
+                    b.ToTable("EmailLogger");
                 });
 #pragma warning restore 612, 618
         }

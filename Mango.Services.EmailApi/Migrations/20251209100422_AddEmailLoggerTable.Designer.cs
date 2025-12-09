@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mango.Services.EmailApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251209082629_EmailTable")]
-    partial class EmailTable
+    [Migration("20251209100422_AddEmailLoggerTable")]
+    partial class AddEmailLoggerTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace Mango.Services.EmailApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailLoggers");
+                    b.ToTable("EmailLogger");
                 });
 #pragma warning restore 612, 618
         }

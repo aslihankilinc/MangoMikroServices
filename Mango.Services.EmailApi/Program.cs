@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlite(builder.Configuration.GetConnectionString("MangoContext"));
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
+
 builder.Services.AddSingleton<IAzureBusConsumerService, AzureBusConsumerService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

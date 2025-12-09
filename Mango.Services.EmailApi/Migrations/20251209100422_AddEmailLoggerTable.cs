@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Mango.Services.EmailApi.Migrations
 {
     /// <inheritdoc />
-    public partial class EmailTable : Migration
+    public partial class AddEmailLoggerTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EmailLoggers",
+                name: "EmailLogger",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -23,7 +23,7 @@ namespace Mango.Services.EmailApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmailLoggers", x => x.Id);
+                    table.PrimaryKey("PK_EmailLogger", x => x.Id);
                 });
         }
 
@@ -31,7 +31,7 @@ namespace Mango.Services.EmailApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EmailLoggers");
+                name: "EmailLogger");
         }
     }
 }

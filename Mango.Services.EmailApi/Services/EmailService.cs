@@ -40,11 +40,11 @@ namespace Mango.Services.EmailApi.Services
                 EmailLoggers emailLog = new()
                 {
                     Email = email,
-                    EmailSent = DateTime.Now,
+                    EmailSent = DateTime.Now.ToString(),
                     Message = message
                 };
                 await using var _db = new AppDbContext(_dbOptions);
-                await _db.EmailLoggers.AddAsync(emailLog);
+                await _db.EmailLogger.AddAsync(emailLog);
                 await _db.SaveChangesAsync();
                 return true;
             }
