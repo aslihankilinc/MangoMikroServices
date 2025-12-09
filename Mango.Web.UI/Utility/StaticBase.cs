@@ -9,5 +9,7 @@
         public static string ProductApiBase { get; set; }
 
         public static string CartApiBase { get; set; }
+
+        public static string OrderApiBase { get; set; }
     }
 }
