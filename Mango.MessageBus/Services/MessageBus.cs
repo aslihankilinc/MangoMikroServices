@@ -1,12 +1,13 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Mango.MessageBus.IContract;
 using Newtonsoft.Json;
 using System.Text;
 
 namespace Mango.MessageBus.Services
 {
-    public class MessageBus
+    public class MessageBus:IMessageBus
     {
-        private string connectionString = "Endpoint=/subscriptions/48f26535-dab5-47fd-a1a1-a7ddcec8b6e3/resourceGroups/DotNetMaster/providers/Microsoft.Resources/deployments/webproject/operations/91C18CFDB2D387B4";
+        private string connectionString = "Endpoint=sb://webproject.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=FaIdu2D/BMFr4yZBgG3vFijmn5DGrlRRB+ASbCKAeAg=";
        public async Task PublishMessage(object message, string topic_queue_Name)
         {
             await using var client = new ServiceBusClient(connectionString);

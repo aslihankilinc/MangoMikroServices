@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Azure;
+using Mango.MessageBus.IContract;
 using Mango.Services.CartApi.Data;
 using Mango.Services.CartApi.IContract;
 using Mango.Services.CartApi.Models;
@@ -6,6 +8,7 @@ using Mango.Services.CartApi.Models.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Mango.Services.CartApi.Controllers
 {
@@ -17,12 +20,17 @@ namespace Mango.Services.CartApi.Controllers
         private IMapper mapper;
         private IProductService _productService;
         private ICouponService _couponService;
-        public CartAPIController(AppDbContext db, IMapper mapper,IProductService productService, ICouponService couponService)
+        private readonly IMessageBus _messageBus;
+        private IConfiguration _configuration;
+        public CartAPIController(AppDbContext db, IMapper mapper,IProductService productService,
+            ICouponService couponService, IMessageBus messageBus, IConfiguration configuration)
         {
             _db = db;
             this.mapper = mapper;
             _productService = productService;
             _couponService = couponService;
+            _configuration = configuration;
+            _messageBus = messageBus;
         }
 
         //CartHeader → sepetin genel bilgisi (hangi kullanıcıya ait, ne zaman oluşturuldu, toplam fiyat vs.)
@@ -179,6 +187,25 @@ namespace Mango.Services.CartApi.Controllers
                 response.IsSuccess = false;
                 response.Message = ex.Message;
                 
+            }
+            return response;
+        }
+
+        [HttpPost("sendEmail")]
+
+        public async Task<ResponseDto> SendEmail([FromBody] CartDto cartDto)
+        {
+            ResponseDto response = new();
+            try
+            {
+                await _messageBus.PublishMessage(cartDto, 
+                    _configuration.GetValue<string>("TopicAndQueueNames:EmailQueue"));
+                response.Result = true;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.ToString();
             }
             return response;
         }

@@ -1,6 +1,6 @@
 ﻿@model CartDto
 
-<form method="post">
+<form method="post" asp-action="SendEmail">
     <br />
     <input asp-for="CartHeader.UserId" hidden />
     <input asp-for="CartHeader.CartHeaderId" hidden />
@@ -81,7 +81,7 @@
         </div>
         <div class="card-footer row">
             <div class="col-6 col-md-3 ">
-                <button type="submit" class="btn btn-outline-danger form-control">Ödeme Bilgileri</button>
+                <button type="submit" class="btn btn-outline-danger form-control">Mail Gönder</button>
             </div>
             <div class="col-6 col-md-3 offset-md-6">
                 <button disabled class="btn btn-success form-control " value="Onayla" />

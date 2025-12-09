@@ -28,7 +28,7 @@ namespace Mango.Web.UI.Services
             {
                 ApiType = EnumApiType.POST,
                 Data = cartDto,
-                Url = StaticBase.CartApiBase + "/api/cart/emailCartRequest"
+                Url = StaticBase.CartApiBase + "/api/cart/sendEmail"
             });
         }
 

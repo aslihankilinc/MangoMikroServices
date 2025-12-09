@@ -1,4 +1,5 @@
 using Mango.Services.EmailApi.Data;
+using Mango.Services.EmailApi.Extensions;
 using Mango.Services.EmailApi.IContract;
 using Mango.Services.EmailApi.Services;
 using Microsoft.EntityFrameworkCore;

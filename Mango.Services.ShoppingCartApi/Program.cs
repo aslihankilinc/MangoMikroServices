@@ -1,4 +1,6 @@
 using AutoMapper;
+using Mango.MessageBus.IContract;
+using Mango.MessageBus.Services;
 using Mango.Services.CartApi;
 using Mango.Services.CartApi.Data;
 using Mango.Services.CartApi.Extensions;
@@ -23,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 //ProductService yapilandirma
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 //Handler ekleme
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthHttpClientHandler>();
