@@ -2,9 +2,12 @@ using AutoMapper;
 using Mango.Services.AuthApi.Data;
 using Mango.Services.AuthApi.IContract;
 using Mango.Services.AuthApi.Models;
+using Mango.Services.AuthApi.RabbitMQ.IContract;
+using Mango.Services.AuthApi.RabbitMQ.Services;
 using Mango.Services.AuthApi.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SQLitePCL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,9 @@ builder.Services.AddControllers();
 //DI Tanýmlama
 builder.Services.AddScoped<IJwtTokenGenerator,JwtTokenGenerator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+//RabbitMQ
+builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

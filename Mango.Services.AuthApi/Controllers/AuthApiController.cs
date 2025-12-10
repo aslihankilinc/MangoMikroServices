@@ -1,5 +1,6 @@
 ﻿using Mango.Services.AuthApi.IContract;
 using Mango.Services.AuthApi.Models.Dto;
+using Mango.Services.AuthApi.RabbitMQ.IContract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Services.AuthApi.Controllers
@@ -9,11 +10,16 @@ namespace Mango.Services.AuthApi.Controllers
     public class AuthApiController : ControllerBase
     {
         private readonly IAuthService _authService;
-        protected ResponseDto _response;
-        public AuthApiController(IAuthService authService)
+        private ResponseDto _response;
+        private IRabbitMQAuthMessageSender _rabbit;
+        private IConfiguration _configuration;
+
+        public AuthApiController(IAuthService authService,IRabbitMQAuthMessageSender rabbit, IConfiguration configuration)
         {
             _authService = authService;
             _response = new ResponseDto();
+            _rabbit = rabbit;
+            _configuration = configuration;
         }
 
         //kullanıcı oluştrma
@@ -27,6 +33,10 @@ namespace Mango.Services.AuthApi.Controllers
                 _response.Message = errorMessage;
                 return BadRequest(_response);
             }
+            var queueKey= _configuration.GetValue<string>("RabbitMQAuthSettings:QueueName");
+            _rabbit.SendMessage(model, queueKey);
+
+
             return Ok(_response);
         }
 
