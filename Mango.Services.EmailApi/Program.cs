@@ -3,6 +3,7 @@ using Mango.Services.EmailApi.Extensions;
 using Mango.Services.EmailApi.IContract;
 using Mango.Services.EmailApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SQLitePCL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,12 +15,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("MangoContext"));
 });
-
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
-optionBuilder.UseSqlite(builder.Configuration.GetConnectionString("MangoContext"));
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
-builder.Services.AddSingleton<IAzureBusConsumerService, AzureBusConsumerService>();
+builder.Services.AddHostedService<RabbitMQAuthConsumerService>();
+//builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -28,26 +28,21 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+if (app.Environment.IsDevelopment())
 {
-    if (!app.Environment.IsDevelopment())
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cart API");
-        c.RoutePrefix = string.Empty;
-    }
-});
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapControllers();
 ApplyMigration();
-app.UseAzureServiceBusConsumer();
-
+//app.UseAzureServiceBusConsumer();
 app.Run();
+
 
 void ApplyMigration()
 {

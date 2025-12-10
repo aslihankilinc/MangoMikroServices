@@ -32,8 +32,33 @@ namespace Mango.Services.EmailApi.Services
 
             await EmailLoggerSend(message.ToString(), cartDto.CartHeader.Email);
         }
-     
+
         private async Task<bool> EmailLoggerSend(string message, string email)
+        {
+            try
+            {
+                EmailLoggers emailLog = new()
+                {
+                    Email = email,
+                    EmailSent = DateTime.Now.ToString(),
+                    Message = message
+                };
+                await using var _db = new AppDbContext(_dbOptions);
+                await _db.EmailLoggers.AddAsync(emailLog);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task RegisterUserEmailAndLog(string email)
+        {
+            string message = "Kullanıcı  Email : " + email;
+            await LogAndEmail(message, "asliko@gmail.com");
+        }
+        private async Task<bool> LogAndEmail(string message, string email)
         {
             try
             {
