@@ -26,7 +26,7 @@ namespace Mango.Services.EmailApi.Services
             _connection =  factory.CreateConnectionAsync().Result;
             _channel = _connection.CreateChannelAsync().Result;
             _channel.QueueDeclareAsync(_configuration.GetValue<string>("RabbitMQEmailSettings:AuthQueueName")
-                , false, false, false, null);
+                , true, false, false, null);
 
         }
         
