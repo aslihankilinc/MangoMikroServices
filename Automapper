@@ -1,0 +1,90 @@
+public class Employee
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public int Age { get; set; }
+    public string Address { get; set; }
+    public string Phone { get; set; }
+    public string Email { get; set; }
+}
+public class EmployeeDTO
+{
+    public int Id { get; set; }
+    public string FullName { get; set; }
+    public int Age { get; set; }
+    public string Address { get; set; }
+    public string Phone { get; set; }
+    public string Email { get; set; }
+}
+
+using AutoMapper;
+
+public class EmployeeProfile : Profile
+{
+    public EmployeeProfile()
+    {
+       CreateMap<Employee, EmployeeDTO>();
+    }
+}
+
+using AutoMapper;
+
+public class EmployeeProfile : Profile
+{
+    public EmployeeProfile()
+    {
+       CreateMap<Employee, EmployeeDTO>()
+            .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName));
+    }
+}
+
+public class EmployeeProfile : Profile
+{
+    public EmployeeProfile()
+    {
+        CreateMap<Employee, EmployeeDTO>()
+            .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
+            .ReverseMap(); // Bu satır ile ters dönüşümü oluşturuyoruz
+    }
+}
+
+
+public class EmployeeService
+{
+    private readonly IMapper _mapper;
+    private readonly DbContext _context;
+
+    public EmployeeService(IMapper mapper, DbContext context)
+    {
+        _mapper = mapper;
+        _context = context;
+    }
+
+    public List<EmployeeDTO> GetEmployees()
+    {
+        List<Employee> employeesFromDb = _context.Employees.ToList();
+
+        List<EmployeeDTO> employeeDTOs = _mapper.Map<List<EmployeeDTO>>(employeesFromDb);
+
+        return employeeDTOs;
+    }
+}
+
+
+public class EmployeeController : ControllerBase
+{
+    private readonly EmployeeService _employeeService;
+
+    public EmployeeController(EmployeeService employeeService)
+    {
+        _employeeService = employeeService;
+    }
+
+    // Kullanım örneği
+    public IActionResult GetEmployees()
+    {
+        List<EmployeeDTO> employees = _employeeService.GetEmployees();
+        return Ok(employees);
+    }
+}
