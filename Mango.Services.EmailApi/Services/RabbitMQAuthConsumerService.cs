@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Mango.Services.EmailApi.Models;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -38,18 +39,27 @@ namespace Mango.Services.EmailApi.Services
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.ReceivedAsync += async (ch, ea) =>
-            {
-                var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-                String email = JsonConvert.DeserializeObject<string>(content);
-                HandleMessage(email).GetAwaiter().GetResult();
+            {              
 
                 consumer.ReceivedAsync += async (ch, ea) =>
                 {
-                    var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    string email = JsonConvert.DeserializeObject<string>(content);
-                    await HandleMessage(email);
+                    try
+                    {
+                        var content = Encoding.UTF8.GetString(ea.Body.ToArray());
+                        string email = content;
 
-                    await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                        Console.WriteLine($"Rabbit Mail :{email}");
+                        await HandleMessage(email);
+
+                        await _channel.BasicAckAsync(ea.DeliveryTag, false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Rabbit Mail Hata:{ex.ToString()}"
+                     );
+                    }
+                   
                 };
 
                 _channel.BasicAckAsync(ea.DeliveryTag, false);
