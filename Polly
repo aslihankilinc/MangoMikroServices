@@ -1,39 +1,56 @@
-using System;
-using System.Net.Http;
-using Polly;
+using System;                     // Temel .NET sınıflarını (Console, Exception vb.) kullanmak için.
+using System.Net.Http;            // HTTP istekleri göndermek için gerekli.
+using Polly;                      // Polly kütüphanesini kullanmak için (dayanıklılık politikaları sağlar).
+
 namespace PollyTutorial
 {
     class Program
     {
+        // Main metodu — asenkron olarak çalışıyor çünkü HTTP istekleri async/await kullanıyor.
         static async Task Main()
         {
-        // Create a HttpClient instance (for demonstration purposes only).
-        var httpClient = new HttpClient();
-        // Define a basic retry policy that retries 3 times with a 2-second delay between retries.
-        var retryPolicy = Policy.Handle<HttpRequestException>()
-                               .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2));
-        try
-        {
-            // Execute the API call with the retry policy.
-            await retryPolicy.ExecuteAsync(async () =>
+            // Örnek olması için bir HttpClient nesnesi oluşturuluyor.
+            // Gerçek projelerde, HttpClient genellikle tek bir instance olarak paylaşılır.
+            var httpClient = new HttpClient();
+
+            // Temel bir "retry" politikası tanımlanıyor:
+            // -> Sadece HttpRequestException hatası durumunda çalışır.
+            // -> 3 kez yeniden deneme yapar.
+            // -> Her deneme arasında 2 saniye bekler.
+            var retryPolicy = Policy
+                                .Handle<HttpRequestException>()            // Yalnızca HTTP isteği hatalarını ele alır.
+                                .WaitAndRetryAsync(                         // Asenkron olarak bekleyip yeniden dener.
+                                    3,                                      // Toplam 3 deneme yapılacak.
+                                    retryAttempt => TimeSpan.FromSeconds(2) // Her deneme arasında 2 saniye bekleme.
+                                );
+
+            try
             {
-                // Replace the following line with your actual API call.
-                var response = await httpClient.GetAsync("https://api.example.com");
-                // Check the response status and throw an exception if it's not successful.
-                response.EnsureSuccessStatusCode();
-                // Process the response here (e.g., deserialize JSON, etc.).
-            });
-        }
-        catch (HttpRequestException ex)
-        {
-            // Handle the HttpRequestException or log it as needed.
-            Console.WriteLine($"An HTTP error occurred: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            // Handle other exceptions or log them as needed.
-            Console.WriteLine($"An error occurred: {ex.Message}");
-        }
+                // Yukarıda tanımlanan politika ile bir HTTP isteği yapılır.
+                // Eğer istek başarısız olursa (örneğin bağlantı hatası), Polly otomatik olarak yeniden dener.
+                await retryPolicy.ExecuteAsync(async () =>
+                {
+                    // Gerçek API çağrısı burada yapılır.
+                    // "https://api.example.com" adresine GET isteği gönderiliyor.
+                    var response = await httpClient.GetAsync("https://api.example.com");
+
+                    // Eğer sunucu 200 (OK) dışında bir yanıt dönerse, bu satır hata fırlatır.
+                    response.EnsureSuccessStatusCode();
+
+                    // Burada yanıtın içeriği işlenebilir (örneğin JSON deserialize edilebilir).
+                    // string result = await response.Content.ReadAsStringAsync();
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                // HTTP isteği başarısız olduğunda yakalanır.
+                Console.WriteLine($"Bir HTTP hatası oluştu: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Diğer beklenmeyen hatalar burada yakalanır.
+                Console.WriteLine($"Bir hata oluştu: {ex.Message}");
+            }
         }
     }
 }
