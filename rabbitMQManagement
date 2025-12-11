@@ -1,0 +1,26 @@
+C:\Users>cd ..
+
+C:\>cd "Program Files"
+
+C:\Program Files>cd "RabbitMQ Server"
+
+C:\Program Files\RabbitMQ Server>cd rabbitmq_server-4.2.1
+
+C:\Program Files\RabbitMQ Server\rabbitmq_server-4.2.1>cd sbin
+
+C:\Program Files\RabbitMQ Server\rabbitmq_server-4.2.1\sbin>rabbitmq-plugins enable rabbitmq_management
+Enabling plugins on node rabbit@L-akilinc-9294:
+rabbitmq_management
+The following plugins have been configured:
+  rabbitmq_management
+  rabbitmq_management_agent
+  rabbitmq_web_dispatch
+Applying plugin configuration to rabbit@L-akilinc-9294...
+The following plugins have been enabled:
+  rabbitmq_management
+  rabbitmq_management_agent
+  rabbitmq_web_dispatch
+
+started 3 plugins.
+
+C:\Program Files\RabbitMQ Server\rabbitmq_server-4.2.1\sbin>
