@@ -1,0 +1,36 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Program
+{
+    public static void Main()
+    {
+        // Veritabanından geldiğini varsayalım (örnek veri)
+        var users = new List<User>
+        {
+            new User { Id = 1, Name = "Ali" },
+            new User { Id = 2, Name = "Ayşe" },
+            new User { Id = 3, Name = "Can" }
+        };
+
+        // Listeyi Dictionary'e çevir (Id → User)
+        var userDict = users.ToDictionary(u => u.Id);
+
+        // Artık O(1) lookup
+        var user = userDict[2]; // doğrudan erişim
+
+        Console.WriteLine($"Kullanıcı: {user.Name}");
+    }
+}
+
+public class User
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+}
+
+if (userDict.TryGetValue(2, out var foundUser))
+    Console.WriteLine(foundUser.Name);
+else
+    Console.WriteLine("Kullanıcı bulunamadı.");
