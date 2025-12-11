@@ -33,3 +33,22 @@ public class CacheService
         return newList;
     }
 }
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly CacheService _cacheService;
+
+    public ProductsController(IMemoryCache cache)
+    {
+        _cacheService = new CacheService(cache);
+    }
+
+    [HttpGet("list")]
+    public IActionResult GetProducts()
+    {
+        var products = _cacheService.GetCachedList();
+        return Ok(products);
+    }
+}
