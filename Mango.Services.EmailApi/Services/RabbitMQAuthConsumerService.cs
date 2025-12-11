@@ -28,7 +28,7 @@ namespace Mango.Services.EmailApi.Services
             };
             _connection = factory.CreateConnectionAsync().Result;
             _channel = _connection.CreateChannelAsync().Result;
-            _channel.QueueDeclareAsync(queueName)
+            _channel.QueueDeclareAsync(queueName
                 , true, false, false, null);
 
         }
